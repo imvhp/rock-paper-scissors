@@ -9,25 +9,53 @@ Write the code for your playRound function to console.log a string value represe
 Increment the humanScore or computerScore variable based on the round winner.
 */
 let choices = ['rock', 'paper', 'scissors'];
+let humanScore = 0;
+let computerScore = 0;
+
+const rock = document.querySelector('.rock');
+const paper = document.querySelector('.paper');
+const scissors = document.querySelector('.scissors');
+const outcome = document.querySelector('.outcome');
+
+rock.addEventListener('click', () => {
+    const computerChoice = getComputerChoice();
+    const humanChoice = 'rock';
+    playRound(humanChoice,computerChoice);
+    playGame(humanScore,computerScore)
+})
+
+paper.addEventListener('click', () => {
+    const computerChoice = getComputerChoice();
+    const humanChoice = 'paper';
+    playRound(humanChoice,computerChoice);
+    playGame(humanScore,computerScore)
+})
+
+scissors.addEventListener('click', () => {
+    const computerChoice = getComputerChoice();
+    const humanChoice = 'scissors';
+    playRound(humanChoice,computerChoice);
+    playGame(humanScore,computerScore)
+})
 
 function getComputerChoice(){
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
-function getHumanChoice(){
-    let validate = false
-    while (validate == false){
-        let person = prompt("rock, paper or scissors? " );
-        if (person == null){
-            continue;
-        }
-        person = person.toLowerCase();
-        if (choices.includes(person)) {
-            validate = true;
-            return person;
-        }
-    }
-}
+// function getHumanChoice(){
+//     let validate = false
+//     while (validate == false){
+//         let person = prompt("rock, paper or scissors? " );
+//         if (person == null){
+//             continue;
+//         }
+//         person = person.toLowerCase();
+//         if (choices.includes(person)) {
+//             validate = true;
+//             return person;
+//         }
+//     }
+// }
 
 function checkWinner(humanChoice,computerChoice){
     if (humanChoice == computerChoice) {
@@ -46,42 +74,35 @@ function checkWinner(humanChoice,computerChoice){
 
 function playRound(humanChoice,computerChoice){
     const result = checkWinner(humanChoice,computerChoice)
+    const p = document.createElement('p');
     if (result == 'Tie'){
-        return "Tie";
+        p.textContent = 'Tie';
     }
     else if (result == 'Win'){
-        return `You win! ${humanChoice} beats ${computerChoice}`;
+        humanScore++;
+        p.innerHTML = `<p>You win! ${humanChoice} beats ${computerChoice}</p>`;
     }
     else {
-        return `You lose! ${computerChoice} beats ${humanChoice}`;
+        computerScore++;
+        p.innerHTML =` <p>You lose! ${computerChoice} beats ${humanChoice}</p>`;
     }
+    outcome.appendChild(p);
 }
 
-function playGame(){
-    let humanScore = 0;
-    let computerScore = 0;
+function playGame(humanScore,computerScore){
+    const h2 = document.createElement('h2')
+    if (humanScore === 5 || computerScore === 5){
+        if (humanScore > computerScore){
+            h2.textContent = 'You are the winner!';
+        }
+        else if (humanScore < computerScore){
+            h2.textContent = 'Computer wins :(';
+        }
+        else{
+             h2.textContent = "It's a tie";
+        }
+    }
+    outcome.appendChild(h2);
+};
 
-    for (let i=0; i<5;i++){
-        const humanChoice = getHumanChoice();
-        const computerChoice = getComputerChoice();
-        const result = checkWinner(humanChoice,computerChoice);
-        console.log(playRound(humanChoice,computerChoice));
-        if (result == 'Win') {
-            humanScore++;
-        } 
-        else if (result == 'Lose') {
-            computerScore++;
-        } 
-    }
-    if (humanScore > computerScore){
-        console.log('You are the winner!')
-    }
-    else if (humanScore < computerScore){
-        console.log('Computer wins :(')
-    }
-    else{
-        console.log("It's a tie")
-    }
-}
 
-playGame();
